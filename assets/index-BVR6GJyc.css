@@ -1,4 +1,4 @@
-._container_q0d9p_1 {
+._container_19bd1_1 {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -12,35 +12,35 @@
   box-shadow: 1px 0px 5px #444;
 }
 
-._cardNumberBox_q0d9p_15 {
+._cardNumberBox_19bd1_15 {
   display: flex;
   gap: 8px;
 }
 
-._logoContainer_q0d9p_20 {
+._logoContainer_19bd1_20 {
   display: flex;
   justify-content: space-between;
 }
 
-._goldBox_q0d9p_25 {
+._goldBox_19bd1_25 {
   width: 36px;
   height: 22px;
   border-radius: 4px;
   background-color: var(--gold);
 }
 
-._logoBrand_q0d9p_32 {
+._logoBrand_19bd1_32 {
   width: 36px;
   height: 22px;
   border-radius: 4px;
 }
 
-._pCardNumber_q0d9p_38 {
+._pCardNumber_19bd1_38 {
   width: 40px;
   letter-spacing: 2px;
 }
 
-._cardNumberBox_q0d9p_15 > ._pCardNumber_q0d9p_38:nth-child(n + 3) {
+._pMaskingCardNumber_19bd1_43 {
   font-size: 21px;
   letter-spacing: -8px;
   line-height: 0.7;

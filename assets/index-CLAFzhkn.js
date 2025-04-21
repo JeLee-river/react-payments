@@ -12080,52 +12080,60 @@ function requireClient() {
 }
 var clientExports = requireClient();
 const ReactDOM = /* @__PURE__ */ getDefaultExportFromCjs(clientExports);
-const container$2 = "_container_q0d9p_1";
-const cardNumberBox = "_cardNumberBox_q0d9p_15";
-const logoContainer = "_logoContainer_q0d9p_20";
-const goldBox = "_goldBox_q0d9p_25";
-const logoBrand = "_logoBrand_q0d9p_32";
-const pCardNumber = "_pCardNumber_q0d9p_38";
+const container$2 = "_container_19bd1_1";
+const cardNumberBox = "_cardNumberBox_19bd1_15";
+const logoContainer = "_logoContainer_19bd1_20";
+const goldBox = "_goldBox_19bd1_25";
+const logoBrand = "_logoBrand_19bd1_32";
+const pCardNumber = "_pCardNumber_19bd1_38";
+const pMaskingCardNumber = "_pMaskingCardNumber_19bd1_43";
 const styles$4 = {
   container: container$2,
   cardNumberBox,
   logoContainer,
   goldBox,
   logoBrand,
-  pCardNumber
+  pCardNumber,
+  pMaskingCardNumber
+};
+const BRAND_IMAGE = {
+  visa: "./Visa.png",
+  master: "./Mastercard.png"
 };
 function CardPreview({ cardNumbers, expirationDate }) {
-  let isBrand = false;
-  let brandName = "Mastercard";
+  const inputCardNumber = cardNumbers.join("");
+  const brand = determineBrand(inputCardNumber);
   const displayCardNumbers = cardNumbers.map((number, index) => {
-    if (index === 0) checkBrand(number);
     if (index <= 1) {
       return number;
     }
     return "•".repeat(number.length);
   });
-  function checkBrand(inputCardNumber) {
-    if (inputCardNumber[0] === "4") {
-      isBrand = true;
-      brandName = "Visa";
-      return;
-    }
-    if (inputCardNumber[0] === "5" && Number(inputCardNumber[1]) >= 1 && Number(inputCardNumber[1]) <= 5) {
-      isBrand = true;
-      brandName = "Mastercard";
-      return;
-    }
-    isBrand = false;
+  function determineBrand(inputCardNumber2) {
+    const visa = ["4"];
+    const master = ["51", "52", "53", "54", "55"];
+    if (checkBrandCard(inputCardNumber2, visa)) return "visa";
+    if (checkBrandCard(inputCardNumber2, master)) return "master";
+    return "";
+  }
+  function checkBrandCard(cardNumber, brandNumbers) {
+    return brandNumbers.some((code) => cardNumber.startsWith(code));
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles$4.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles$4.logoContainer, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles$4.goldBox }),
-      isBrand && /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: `./${brandName}.png`, className: styles$4.logoBrand })
+      brand === "" ? null : /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: BRAND_IMAGE[brand], className: styles$4.logoBrand })
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `${styles$4.cardNumberBox} tx-md`, children: displayCardNumbers.map((number) => {
-      return /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: styles$4.pCardNumber, children: number });
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `${styles$4.cardNumberBox} tx-md`, children: displayCardNumbers.map((number, index) => {
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "p",
+        {
+          className: `${styles$4.pCardNumber} ${index >= 2 ? styles$4.pMaskingCardNumber : ""}`,
+          children: number
+        }
+      );
     }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: `${styles$4.pCardNumber} tx-md`, children: expirationDate.join("/") })
+    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: `${styles$4.pCardNumber} tx-md`, children: expirationDate.month !== "" || expirationDate.year !== "" ? `${expirationDate.month}/${expirationDate.year}` : "" })
   ] });
 }
 const input = "_input_fip8t_1";
@@ -12136,13 +12144,15 @@ const styles$3 = {
 };
 function Input({
   type,
-  onChange,
   name,
   id,
   placeholder,
-  maxLength
+  maxLength,
+  value,
+  handleInputChange,
+  isValidInput,
+  dataInputId
 }) {
-  const [isValid, setIsValid] = reactExports.useState(true);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "input",
     {
@@ -12151,8 +12161,10 @@ function Input({
       id,
       placeholder,
       maxLength,
-      onChange: (e) => onChange(e, setIsValid),
-      className: `${styles$3.input} ${!isValid && styles$3.isNotValid} tx-md`
+      value,
+      onChange: handleInputChange,
+      className: `${styles$3.input} ${!isValidInput && styles$3.isNotValid} tx-md`,
+      "data-input-id": dataInputId
     }
   );
 }
@@ -12193,42 +12205,45 @@ const validatorUtils = {
   isNotEmpty: (value) => value.trim() !== "",
   isNumber: (value) => !Number.isNaN(Number(value)),
   isValidLength: (value, length) => value.length === length,
-  isValidNumberRange: (value, min, max) => value >= min && value <= max,
-  isValidExpirationDate: (month, year) => {
-    const numberMonth = Number(month);
-    const numberYear = Number(year);
+  isValidNumberRange: ({
+    value,
+    min = Number.NEGATIVE_INFINITY,
+    max = Number.POSITIVE_INFINITY
+  }) => value >= min && value <= max,
+  isValidExpirationDate: ({ month, year }) => {
     const today = /* @__PURE__ */ new Date();
-    const currentFullYear = today.getFullYear();
-    const currentYear = currentFullYear % 100;
+    const currentYear = today.getFullYear();
     const currentMonth = today.getMonth() + 1;
-    if (month === "" && numberYear === currentYear) {
-      return true;
-    }
-    if (currentYear < numberYear || year === "") {
-      return true;
-    }
-    if (currentYear === numberYear) {
-      return numberMonth >= currentMonth;
-    }
-    return false;
+    const expirationYear = 2e3 + Number(year);
+    const expirationMonth = Number(month);
+    return expirationYear > currentYear || expirationYear === currentYear && expirationMonth >= currentMonth;
   }
 };
 function CardCVCInput() {
-  const [feedbackMessage2, setFeedbackMessage] = reactExports.useState("");
-  function onChangeHandler(e, setIsValid) {
-    const cvc = e.target.value;
-    if (!validatorUtils.isNumber(cvc)) {
-      setFeedbackMessage("숫자만 입력 가능합니다.");
+  const [cardCVC, setCardCVC] = reactExports.useState("");
+  const [isValid, setIsValid] = reactExports.useState(true);
+  function handleCVCNumberChange(e) {
+    const target = e.target;
+    const value = target.value;
+    setCardCVC(value);
+    validateCVCnumber(value);
+  }
+  function validateCVCnumber(cvcNumber) {
+    if (!checkIsValidCVC(cvcNumber)) {
       setIsValid(false);
-      return;
+    } else {
+      setIsValid(true);
     }
+  }
+  function checkIsValidCVC(cvcNumber) {
+    return validatorUtils.isNumber(cvcNumber);
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     InputForm,
     {
       title: "CVC 번호를 입력해 주세요.",
       label: "CVC",
-      feedbackMessage: feedbackMessage2,
+      feedbackMessage: isValid ? "" : "숫자만 입력 가능합니다.",
       children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         Input,
         {
@@ -12236,76 +12251,142 @@ function CardCVCInput() {
           name: "cardCVC",
           placeholder: "123",
           maxLength: 3,
-          onChange: onChangeHandler
+          value: cardCVC,
+          handleInputChange: handleCVCNumberChange,
+          isValidInput: isValid
         }
       )
     }
   ) });
 }
-const numbersArray$1 = Array.from({ length: 2 }).fill("");
 function CardExpirationDateInput({
+  expirationDate,
   setExpirationDate
 }) {
+  const [isValidInputs, setIsValidInputs] = reactExports.useState({
+    month: true,
+    year: true
+  });
   const [feedbackMessage2, setFeedbackMessage] = reactExports.useState("");
-  function onChangeHandler(e, setIsValid, index) {
-    const expirationDate = e.target.value;
-    if (!validatorUtils.isNumber(expirationDate)) {
+  function handleCardNumberChange(e) {
+    const target = e.target;
+    const { name, value } = target;
+    setExpirationDate({ ...expirationDate, [name]: value });
+    checkIsValidExpiration(name, value);
+    checkIsValidType(name, value);
+  }
+  function checkIsValidType(name, expiryValue) {
+    if (!validatorUtils.isNumber(expiryValue)) {
       setFeedbackMessage("숫자만 입력 가능합니다.");
-      setIsValid(false);
+      setIsValidInputs((prev) => {
+        return { ...prev, [name]: false };
+      });
+    }
+  }
+  function checkIsValidExpiration(name, value) {
+    const { month, year } = expirationDate;
+    if (month !== "" && year !== "" && !validatorUtils.isValidExpirationDate(expirationDate)) {
+      setFeedbackMessage("유효하지 않은 카드입니다. 유효 기간을 확인해주세요.");
+      setIsValidInputs((prev) => {
+        return { ...prev, [name]: false };
+      });
       return;
     }
-    numbersArray$1[index] = expirationDate;
-    setExpirationDate([...numbersArray$1]);
-    if (index === 0 && !validatorUtils.isValidNumberRange(Number(expirationDate), 1, 12) || !validatorUtils.isValidExpirationDate(numbersArray$1[0], numbersArray$1[1])) {
+    if (name === "month" && value !== "" && !validatorUtils.isValidNumberRange({
+      value: Number(value),
+      min: 1,
+      max: 12
+    })) {
       setFeedbackMessage("유효하지 않은 카드입니다. 유효 기간을 확인해주세요.");
-      setIsValid(false);
+      setIsValidInputs((prev) => {
+        return { ...prev, [name]: false };
+      });
       return;
     }
-    if (index === 1 && !validatorUtils.isValidExpirationDate(numbersArray$1[0], numbersArray$1[1])) {
+    if (name === "year" && value !== "" && !validatorUtils.isValidNumberRange({ value: Number(value), min: 25 })) {
       setFeedbackMessage("유효하지 않은 카드입니다. 유효 기간을 확인해주세요.");
-      setIsValid(false);
+      setIsValidInputs((prev) => {
+        return { ...prev, [name]: false };
+      });
       return;
     }
     setFeedbackMessage("");
-    setIsValid(true);
+    setIsValidInputs((prev) => {
+      return { ...prev, [name]: true };
+    });
   }
-  const inputs = Array.from({ length: 2 }).map((_, index) => {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Input,
-      {
-        type: "tel",
-        name: "cardExpirationDate",
-        placeholder: index === 0 ? "MM" : "YY",
-        onChange: (e, setIsValid) => onChangeHandler(e, setIsValid, index),
-        maxLength: 2
-      }
-    );
-  });
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
     InputForm,
     {
       feedbackMessage: feedbackMessage2,
       title: "카드 유효기간을 입력해 주세요.",
       description: "월/년도(MMYY)를 순서대로 입력해 주세요.",
       label: "유효기간",
-      children: inputs
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Input,
+          {
+            type: "tel",
+            name: "month",
+            placeholder: "MM",
+            value: expirationDate.month,
+            handleInputChange: handleCardNumberChange,
+            maxLength: 2,
+            isValidInput: isValidInputs.month
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Input,
+          {
+            type: "tel",
+            name: "year",
+            placeholder: "YY",
+            value: expirationDate.year,
+            handleInputChange: handleCardNumberChange,
+            maxLength: 2,
+            isValidInput: isValidInputs.year
+          }
+        )
+      ]
     }
   ) });
 }
 const numbersArray = Array.from({ length: 4 }).fill("");
 function CardNumberInput({
+  cardNumbers,
   setCardNumbers
 }) {
+  const initialValidInputs = Array.from({ length: 4 }, () => true);
+  const [isValidInputs, setIsValidInputs] = reactExports.useState(initialValidInputs);
   const [feedbackMessage2, setFeedbackMessage] = reactExports.useState("");
-  function onChangeHandler(e, setIsValid, index) {
-    const inputCardNumber = e.target.value;
-    if (!validatorUtils.isNumber(inputCardNumber)) {
-      setFeedbackMessage("숫자만 입력 가능합니다.");
-      setIsValid(false);
-      return;
-    }
-    numbersArray[index] = inputCardNumber;
+  function handleCardNumberChange(e) {
+    const target = e.target;
+    const value = target.value;
+    const dataInputId = Number(target.dataset.inputId);
+    updateCarNumber(value, dataInputId);
+    validateCardNumber(value, dataInputId);
+    decideShowFeedback();
+  }
+  function updateCarNumber(inputCardNumber, dataInputId) {
+    numbersArray[dataInputId] = inputCardNumber;
     setCardNumbers([...numbersArray]);
+  }
+  function validateCardNumber(inputCardNumber, dataInputId) {
+    if (!validatorUtils.isNumber(inputCardNumber)) {
+      isValidInputs[dataInputId] = false;
+      setIsValidInputs([...isValidInputs]);
+    } else {
+      isValidInputs[dataInputId] = true;
+      setIsValidInputs([...isValidInputs]);
+    }
+  }
+  function decideShowFeedback() {
+    const hasInvalidInput = isValidInputs.some((isValid) => !isValid);
+    if (hasInvalidInput) {
+      setFeedbackMessage("숫자만 입력 가능합니다.");
+    } else {
+      setFeedbackMessage("");
+    }
   }
   const inputs = Array.from({ length: 4 }).map((_, index) => {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -12315,7 +12396,10 @@ function CardNumberInput({
         name: "cardNumber",
         placeholder: "1234",
         maxLength: 4,
-        onChange: (e, setIsValid) => onChangeHandler(e, setIsValid, index)
+        value: cardNumbers[index],
+        handleInputChange: handleCardNumberChange,
+        isValidInput: isValidInputs[index],
+        dataInputId: index
       }
     );
   });
@@ -12335,12 +12419,26 @@ const styles$1 = {
   cardInputForm
 };
 function CardInputForm({
+  cardNumbers,
+  expirationDate,
   setCardNumbers,
   setExpirationDate
 }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles$1.cardInputForm, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(CardNumberInput, { setCardNumbers }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(CardExpirationDateInput, { setExpirationDate }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CardNumberInput,
+      {
+        cardNumbers,
+        setCardNumbers
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CardExpirationDateInput,
+      {
+        expirationDate,
+        setExpirationDate
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(CardCVCInput, {})
   ] });
 }
@@ -12352,7 +12450,10 @@ const styles = {
 };
 function PaymentInputPage() {
   const [cardNumbers, setCardNumbers] = reactExports.useState([]);
-  const [expirationDate, setExpirationDate] = reactExports.useState([]);
+  const [expirationDate, setExpirationDate] = reactExports.useState({
+    month: "",
+    year: ""
+  });
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: styles.section, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       CardPreview,
@@ -12364,6 +12465,8 @@ function PaymentInputPage() {
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       CardInputForm,
       {
+        cardNumbers,
+        expirationDate,
         setCardNumbers,
         setExpirationDate
       }
