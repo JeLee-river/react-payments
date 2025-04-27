@@ -1,67 +1,3 @@
-._container_19bd1_1 {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 212px;
-  height: 120px;
-  background-color: #000000c4;
-  border-radius: 4px;
-  gap: 16px;
-  color: var(--white);
-  padding: 14px;
-  box-shadow: 1px 0px 5px #444;
-}
-
-._cardNumberBox_19bd1_15 {
-  display: flex;
-  gap: 8px;
-}
-
-._logoContainer_19bd1_20 {
-  display: flex;
-  justify-content: space-between;
-}
-
-._goldBox_19bd1_25 {
-  width: 36px;
-  height: 22px;
-  border-radius: 4px;
-  background-color: var(--gold);
-}
-
-._logoBrand_19bd1_32 {
-  width: 36px;
-  height: 22px;
-  border-radius: 4px;
-}
-
-._pCardNumber_19bd1_38 {
-  width: 40px;
-  letter-spacing: 2px;
-}
-
-._pMaskingCardNumber_19bd1_43 {
-  font-size: 21px;
-  letter-spacing: -8px;
-  line-height: 0.7;
-}
-._input_fip8t_1 {
-  width: 100%;
-  border: 1px solid var(--grey);
-  border-radius: 4px;
-  color: var(--black);
-  padding: 12px 8px;
-  &::placeholder {
-    color: var(--grey);
-  }
-
-  &:focus {
-    border: 1px solid var(--black);
-  }
-  &._isNotValid_fip8t_14 {
-    border: 1px solid var(--red);
-  }
-}
 ._container_1hf2k_1 {
   display: flex;
   flex-direction: column;
@@ -105,19 +41,195 @@ label {
   color: var(--red);
   height: 18px;
 }
-._cardInputForm_17pi5_1 {
+._selectBox_1m498_1 {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+._selectedInputContainer_1m498_9 {
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+._selectedInput_1m498_9 {
+  width: 100%;
+  padding: 12px 8px;
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+  color: var(--black);
+  &::placeholder {
+    color: var(--grey);
+  }
+
+  &:focus {
+    border: 1px solid var(--black);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+._selectedIcon_1m498_34 {
+  position: absolute;
+  top: 18px;
+  right: 11px;
+}
+
+._optionBox_1m498_40 {
+  position: absolute;
+  top: 110%;
+
+  width: 100%;
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+  background-color: var(--white);
+  color: var(--grey-2);
+  &::placeholder {
+    color: var(--grey);
+  }
+}
+
+._optionList_1m498_54 {
+  width: 100%;
+  padding: 8px 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+._hidden_1m498_63 {
+  display: none;
+}
+._container_hsixr_1 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 212px;
+  height: 120px;
+  background-color: #000000c4;
+  border-radius: 4px;
+  gap: 16px;
+  color: var(--white);
+  padding: 14px;
+  box-shadow: 1px 0px 5px #444;
+}
+
+._cardNumberBox_hsixr_15 {
+  display: flex;
+  gap: 8px;
+}
+
+._logoContainer_hsixr_20 {
+  display: flex;
+  justify-content: space-between;
+}
+
+._goldBox_hsixr_25 {
+  width: 36px;
+  height: 22px;
+  border-radius: 4px;
+  background-color: var(--gold);
+}
+
+._logoBrand_hsixr_32 {
+  width: 36px;
+  height: 22px;
+  border-radius: 4px;
+}
+
+._cardNumber_hsixr_15 {
+  width: 40px;
+  letter-spacing: 2px;
+}
+
+._maskingCardNumber_hsixr_43 {
+  font-size: 21px;
+  letter-spacing: -8px;
+  line-height: 0.7;
+}
+
+._lotte_hsixr_49 {
+  background-color: var(--lotte);
+}
+
+._shinhan_hsixr_53 {
+  background-color: var(--shinhan);
+}
+
+._kakao_hsixr_57 {
+  background-color: var(--kakao);
+}
+
+._hyundai_hsixr_61 {
+  background-color: var(--hyundai);
+}
+
+._woori_hsixr_65 {
+  background-color: var(--woori);
+}
+
+._hana_hsixr_69 {
+  background-color: var(--hana);
+}
+
+._kb_hsixr_73 {
+  background-color: var(--kb);
+}
+._input_fip8t_1 {
+  width: 100%;
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+  color: var(--black);
+  padding: 12px 8px;
+  &::placeholder {
+    color: var(--grey);
+  }
+
+  &:focus {
+    border: 1px solid var(--black);
+  }
+  &._isNotValid_fip8t_14 {
+    border: 1px solid var(--red);
+  }
+}
+._cardInputForm_y3w3r_1 {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 26px;
 }
-._section_tv0lf_1 {
+
+._submitButton_y3w3r_8 {
+  width: calc(390px + 57px);
+  position: sticky;
+
+  bottom: 0;
+  margin: -28px;
+}
+._button_1dsc2_1 {
+  height: 52px;
+}
+
+._buttonPrimary_1dsc2_5 {
+  background-color: var(--black);
+  color: var(--white);
+}
+._section_y8439_1 {
   display: flex;
   width: 100%;
   justify-content: center;
+  height: 100vh;
 }
-._container_tv0lf_6 {
+._container_y8439_7 {
   width: 390px;
-  height: fit-content;
+  height: 100%;
+  min-height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,6 +237,29 @@ label {
   border-radius: 4px;
   padding: 28px;
   gap: 40px;
+}
+._section_1nsp6_1 {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+}
+._container_1nsp6_7 {
+  width: 390px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+  padding: 28px;
+  gap: 40px;
+}
+
+._goToMainButton_1nsp6_20 {
+  width: 100%;
+  border-radius: 5px;
 }
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -291,10 +426,19 @@ input {
 
 :root {
   --grey: #acacac;
+  --grey-2: #4f4f4f;
   --black: #000000;
   --white: #ffffff;
   --red: #ff3d3d;
   --gold: #ddcd78;
+
+  --lotte: #f04651;
+  --shinhan: #0046ff;
+  --kakao: #ffe600;
+  --hyundai: #000000;
+  --woori: #007bc8;
+  --hana: #009490;
+  --kb: #6a6056;
 }
 
 .tx-xl {
