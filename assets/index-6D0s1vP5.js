@@ -15118,7 +15118,7 @@ function RegisterComplete() {
     setPassword(INITIAL_CARD.password);
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: styles.section, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: styles.container, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "/CompleteIcon.png", alt: "등록 완료 아이콘" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "../CompleteIcon.png", alt: "등록 완료 아이콘" }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "tx-xl", children: [
       cardNumbers[0],
       "로 시작하는"
@@ -15139,9 +15139,8 @@ function RegisterComplete() {
     )
   ] }) });
 }
-var define_process_env_default = {};
 function App() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { basename: define_process_env_default.PUBLIC_URL, children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { basename: "/react-payments/", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: ROUTER.main, element: /* @__PURE__ */ jsxRuntimeExports.jsx(PaymentInputPage, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Route,
