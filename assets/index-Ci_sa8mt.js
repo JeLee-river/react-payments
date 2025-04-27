@@ -15139,8 +15139,9 @@ function RegisterComplete() {
     )
   ] }) });
 }
+var define_process_env_default = {};
 function App() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { basename: define_process_env_default.PUBLIC_URL, children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: ROUTER.main, element: /* @__PURE__ */ jsxRuntimeExports.jsx(PaymentInputPage, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Route,
